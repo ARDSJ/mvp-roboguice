@@ -14,7 +14,7 @@ import roboguice.activity.RoboActionBarActivity;
 public class MainActivity extends RoboActionBarActivity implements MainContract.View{
 
     @Inject
-    MainPresenter presenter;
+    MainContract.Presenter presenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
