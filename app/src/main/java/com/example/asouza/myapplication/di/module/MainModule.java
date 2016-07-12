@@ -1,4 +1,4 @@
-package com.example.asouza.myapplication.module;
+package com.example.asouza.myapplication.di.module;
 
 import com.example.asouza.myapplication.view.MainActivity;
 import com.example.asouza.myapplication.view.contract.MainContract;

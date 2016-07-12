@@ -10,6 +10,7 @@ import com.google.inject.Inject;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
+import roboguice.inject.InjectResource;
 
 public class MainActivity extends RoboActionBarActivity implements MainContract.View{
 

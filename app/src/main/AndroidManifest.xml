@@ -10,7 +10,7 @@
         android:theme="@style/AppTheme">
 
         <meta-data android:name="roboguice.modules"
-            android:value="com.example.asouza.myapplication.module.MainModule" />
+            android:value="com.example.asouza.myapplication.di.module.MainModule" />
 
         <activity android:name=".view.MainActivity">
             <intent-filter>
