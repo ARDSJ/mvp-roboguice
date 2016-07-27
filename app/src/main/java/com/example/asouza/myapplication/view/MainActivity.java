@@ -61,6 +61,11 @@ public class MainActivity extends RoboActionBarActivity implements MainContract.
     }
 
     @Override
+    public void searching() {
+
+    }
+
+    @Override
     public void successSearch(Volumes response) {
 
     }

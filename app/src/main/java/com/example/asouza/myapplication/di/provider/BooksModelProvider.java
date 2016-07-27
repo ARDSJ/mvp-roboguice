@@ -10,7 +10,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 /**
  * Created by asouza on 12/07/16.
  */
-public class NetProvider implements Provider<IBooksRestModel> {
+public class BooksModelProvider implements Provider<IBooksRestModel> {
 
     @Inject private Retrofit.Builder builderProvider;
 

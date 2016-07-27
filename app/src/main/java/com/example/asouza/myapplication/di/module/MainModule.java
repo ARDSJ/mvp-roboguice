@@ -1,7 +1,7 @@
 package com.example.asouza.myapplication.di.module;
 
+import com.example.asouza.myapplication.di.provider.BooksModelProvider;
 import com.example.asouza.myapplication.di.provider.NetBuilderProvider;
-import com.example.asouza.myapplication.di.provider.NetProvider;
 import com.example.asouza.myapplication.model.IBooksRestModel;
 import com.example.asouza.myapplication.view.MainActivity;
 import com.example.asouza.myapplication.view.contract.MainContract;
@@ -19,6 +19,6 @@ public class MainModule extends AbstractModule{
         bind(MainContract.View.class).to(MainActivity.class);
         bind(MainContract.Presenter.class).to(MainPresenter.class);
         bind(Retrofit.Builder.class).toProvider(NetBuilderProvider.class).asEagerSingleton();
-        bind(IBooksRestModel.class).toProvider(NetProvider.class).asEagerSingleton();
+        bind(IBooksRestModel.class).toProvider(BooksModelProvider.class).asEagerSingleton();
     }
 }
