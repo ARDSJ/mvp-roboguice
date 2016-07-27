@@ -10,6 +10,8 @@ import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 
+import java.util.concurrent.TimeUnit;
+
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
@@ -38,6 +40,7 @@ public class MainActivity extends RoboActionBarActivity implements MainContract.
         Observable<TextViewAfterTextChangeEvent> observerInputSearch = RxTextView.afterTextChangeEvents(inputSearch).share();
 
         observerInputSearch
+                .debounce(2000, TimeUnit.MILLISECONDS)
                 .filter(new Func1<TextViewAfterTextChangeEvent, Boolean>() {
                     @Override
                     public Boolean call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
