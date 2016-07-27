@@ -1,31 +1,44 @@
 package com.example.asouza.myapplication.view.presenter;
 
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.example.asouza.myapplication.model.service.UserService;
+import com.example.asouza.myapplication.model.entity.Volumes;
+import com.example.asouza.myapplication.model.service.VolumesService;
 import com.example.asouza.myapplication.view.contract.MainContract;
 import com.google.inject.Inject;
 
-import roboguice.inject.ContextSingleton;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by asouza on 11/07/16.
  */
-@ContextSingleton
+
 public class MainPresenter extends BasePresenter<MainContract.View> implements MainContract.Presenter {
 
     private static final String TAG = "MainPresenter";
 
     @Inject
-    UserService userService;
+    VolumesService volumesService;
 
     public MainPresenter(){
         Log.d(TAG, "MainPresenter: ");
     }
 
     @Override
-    public void presenteText() {
-        Log.d(TAG, "presenteText: ");
-        userService.createUser();
+    public void search(@NonNull String query) {
+        volumesService.search(query).enqueue(new Callback<Volumes>() {
+            @Override
+            public void onResponse(Call<Volumes> call, Response<Volumes> response) {
+                getView().successSearch(response);
+            }
+
+            @Override
+            public void onFailure(Call<Volumes> call, Throwable t) {
+                getView().errorSearch(call);
+            }
+        });
     }
 }

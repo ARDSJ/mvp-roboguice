@@ -1,5 +1,10 @@
 package com.example.asouza.myapplication.view.contract;
 
+import com.example.asouza.myapplication.model.entity.Volumes;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
 /**
  * Created by asouza on 11/07/16.
  */
@@ -7,15 +12,15 @@ public interface MainContract {
 
     interface View{
 
-        void onSuccessGetText();
+        void successSearch(Response<Volumes> response);
 
-        void onErrorGetText();
+        void errorSearch(Call<Volumes> call);
 
     }
 
     interface Presenter{
 
-        void presenteText();
+        void search(String query);
 
     }
 

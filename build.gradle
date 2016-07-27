@@ -16,6 +16,11 @@ allprojects {
     repositories {
         jcenter()
     }
+    gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            options.compilerArgs << "-AguiceAnnotationDatabasePackageName=com.example.asouza.myapplication"
+        }
+    }
 }
 
 task clean(type: Delete) {
