@@ -10,8 +10,6 @@ import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 
-import retrofit2.Call;
-import retrofit2.Response;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActionBarActivity;
 import roboguice.inject.ContentView;
@@ -52,12 +50,12 @@ public class MainActivity extends RoboActionBarActivity implements MainContract.
     }
 
     @Override
-    public void successSearch(Response<Volumes> response) {
+    public void successSearch(Volumes response) {
 
     }
 
     @Override
-    public void errorSearch(Call<Volumes> call) {
+    public void errorSearch() {
 
     }
 

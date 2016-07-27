@@ -12,9 +12,9 @@ public interface MainContract {
 
     interface View{
 
-        void successSearch(Response<Volumes> response);
+        void successSearch(Volumes response);
 
-        void errorSearch(Call<Volumes> call);
+        void errorSearch();
 
     }
 
