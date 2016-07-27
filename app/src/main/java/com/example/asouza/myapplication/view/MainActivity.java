@@ -16,6 +16,7 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import rx.Observable;
 import rx.functions.Action1;
+import rx.functions.Func1;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActionBarActivity implements MainContract.View{
@@ -36,7 +37,14 @@ public class MainActivity extends RoboActionBarActivity implements MainContract.
 
         Observable<TextViewAfterTextChangeEvent> observerInputSearch = RxTextView.afterTextChangeEvents(inputSearch).share();
 
-        observerInputSearch.subscribe(new Action1<TextViewAfterTextChangeEvent>() {
+        observerInputSearch
+                .filter(new Func1<TextViewAfterTextChangeEvent, Boolean>() {
+                    @Override
+                    public Boolean call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
+                        return textViewAfterTextChangeEvent.editable().toString().trim().length() > 1;
+                    }
+                })
+                .subscribe(new Action1<TextViewAfterTextChangeEvent>() {
             @Override
             public void call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
                 String query = textViewAfterTextChangeEvent.editable().toString();
