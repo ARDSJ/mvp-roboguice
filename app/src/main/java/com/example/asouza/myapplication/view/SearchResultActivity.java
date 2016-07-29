@@ -2,6 +2,7 @@ package com.example.asouza.myapplication.view;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.EditText;
 
@@ -13,6 +14,7 @@ import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
 import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
+import roboguice.activity.RoboActionBarActivity;
 import roboguice.activity.RoboActivity;
 import roboguice.context.event.OnCreateEvent;
 import roboguice.event.Observes;
@@ -25,13 +27,16 @@ import rx.functions.Action1;
 import rx.functions.Func1;
 
 @ContentView(R.layout.activity_search_result)
-public class SearchResultActivity extends RoboActivity implements SearchResultContrat.View{
+public class SearchResultActivity extends RoboActionBarActivity implements SearchResultContrat.View{
 
     @InjectExtra(value = "paramSearchQuery",optional = true)
     String paramSearchQuery;
 
     @InjectView(R.id.input_search)
     EditText inputSearch;
+
+    @InjectView(R.id.toolbar_search)
+    Toolbar toolbarSearch;
 
     @Inject
     SearchResultContrat.Presenter presenter;
@@ -52,7 +57,13 @@ public class SearchResultActivity extends RoboActivity implements SearchResultCo
         presenter.search(paramSearchQuery);
     }
 
-    public void setup(@Observes OnCreateEvent onCreateEvent){
+    public void setupConfigs(@Observes OnCreateEvent onCreateEvent){
+        setSupportActionBar(toolbarSearch);
+        getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    public void setupBinds(@Observes OnCreateEvent onCreateEvent){
 
         RxTextView.editorActionEvents(inputSearch)
                 .observeOn(AndroidSchedulers.mainThread())
