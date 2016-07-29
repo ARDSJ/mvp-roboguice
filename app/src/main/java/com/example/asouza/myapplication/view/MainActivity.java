@@ -1,6 +1,7 @@
 package com.example.asouza.myapplication.view;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 
 import com.example.asouza.myapplication.R;
@@ -15,7 +16,6 @@ import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
-import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import rx.functions.Action1;
@@ -31,6 +31,9 @@ public class MainActivity extends RoboActivity implements MainContract.View {
 
     @InjectView(R.id.input_search)
     EditText inputSearch;
+
+    @InjectView(R.id.toolbar_search)
+    Toolbar toolbarSearch;
 
     @Inject
     MainContract.Presenter presenter;
@@ -55,7 +58,7 @@ public class MainActivity extends RoboActivity implements MainContract.View {
                     public void call(TextViewEditorActionEvent textViewEditorActionEvent) {
                         String query = textViewEditorActionEvent.view().getText().toString();
                         utilIntent.getIntent().putExtra("paramSearchQuery",query);
-                        utilIntent.newIntentWithSharedElements(SearchResultActivity.class,transictionInputSearch, inputSearch);
+                        utilIntent.newIntentWithSharedElements(SearchResultActivity.class,transictionInputSearch, toolbarSearch);
                     }
                 });
     }

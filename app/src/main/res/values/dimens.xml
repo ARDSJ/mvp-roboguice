@@ -3,4 +3,5 @@
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="activity_main_top_margin">100dp</dimen>
+    <dimen name="my_toolbar_default_elevation">5dp</dimen>
 </resources>

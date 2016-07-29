@@ -15,7 +15,6 @@
             android:value="com.example.asouza.myapplication.di.module.MainModule" />
 
         <activity
-            android:theme="@style/AppTheme.Main"
             android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
