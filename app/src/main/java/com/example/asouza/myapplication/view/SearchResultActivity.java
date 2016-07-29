@@ -1,9 +1,11 @@
 package com.example.asouza.myapplication.view;
 
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.asouza.myapplication.R;
@@ -12,6 +14,7 @@ import com.example.asouza.myapplication.util.UtilProgressDialog;
 import com.example.asouza.myapplication.view.contract.SearchResultContrat;
 import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
+import com.jakewharton.rxbinding.widget.RxToolbar;
 import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import roboguice.activity.RoboActionBarActivity;
@@ -22,6 +25,7 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
+import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
@@ -50,6 +54,16 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                supportFinishAfterTransition();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void startSearch(@Observes OnCreateEvent onCreateEvent){

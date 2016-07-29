@@ -23,6 +23,7 @@
             </intent-filter>
         </activity>
         <activity
+            android:parentActivityName=".view.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:name=".view.SearchResultActivity">
 
