@@ -14,16 +14,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <EditText
-            android:transitionName="@string/transiction_input_search"
-            android:gravity="center_vertical"
-            android:id="@+id/input_search"
-            android:hint="@string/lbl_search"
-            android:maxLines="1"
-            android:inputType="text"
-            android:imeOptions="actionSearch"
+        <android.support.v7.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+            <EditText
+                android:transitionName="@string/transiction_input_search"
+                android:gravity="center_vertical"
+                android:id="@+id/input_search"
+                android:hint="@string/lbl_search"
+                android:maxLines="1"
+                android:inputType="text"
+                android:imeOptions="actionSearch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+        </android.support.v7.widget.Toolbar>
 
     </LinearLayout>
 

@@ -14,14 +14,19 @@
             android:name="roboguice.modules"
             android:value="com.example.asouza.myapplication.di.module.MainModule" />
 
-        <activity android:name=".view.MainActivity">
+        <activity
+            android:theme="@style/AppTheme.Main"
+            android:name=".view.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.SearchResultActivity"></activity>
+        <activity
+            android:name=".view.SearchResultActivity">
+
+        </activity>
     </application>
 
 </manifest>
