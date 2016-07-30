@@ -5,6 +5,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 
 import retrofit2.Retrofit;
+import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
@@ -18,6 +19,7 @@ public class BooksModelProvider implements Provider<IBooksRestModel> {
     public IBooksRestModel get() {
 
         return this.builderProvider.baseUrl("https://www.googleapis.com/books/v1/")
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
                 .create(IBooksRestModel.class);

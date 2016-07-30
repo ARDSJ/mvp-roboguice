@@ -7,6 +7,7 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by asouza on 26/07/16.
@@ -14,6 +15,6 @@ import retrofit2.http.Query;
 public interface IBooksRestModel {
 
     @GET("volumes")
-    public Call<Volumes> searchBook(@Query("q") String query);
+    public Observable<Volumes> searchBook(@Query("q") String query);
 
 }

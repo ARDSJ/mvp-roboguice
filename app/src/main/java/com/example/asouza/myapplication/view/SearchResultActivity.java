@@ -1,8 +1,11 @@
 package com.example.asouza.myapplication.view;
 
+import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.MenuItem;
@@ -11,6 +14,7 @@ import android.widget.EditText;
 import com.example.asouza.myapplication.R;
 import com.example.asouza.myapplication.model.entity.Volumes;
 import com.example.asouza.myapplication.util.UtilProgressDialog;
+import com.example.asouza.myapplication.view.adapter.SearchResultAdapter;
 import com.example.asouza.myapplication.view.contract.SearchResultContrat;
 import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
@@ -42,11 +46,17 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     @InjectView(R.id.toolbar_search)
     Toolbar toolbarSearch;
 
+    @InjectView(R.id.list_search_result)
+    RecyclerView listSearchResult;
+
     @Inject
     SearchResultContrat.Presenter presenter;
 
     @Inject
     UtilProgressDialog progressDialog;
+
+    @Inject
+    SearchResultAdapter searchResultAdapter;
 
     @InjectResource(R.string.searching_loading_message)
     String searchingLoadingMessage;
@@ -94,6 +104,13 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
                 presenter.search(query);
             }
         });
+    }
+
+    public void setupListSearchResults(@Observes OnCreateEvent onCreateEvent){
+
+        listSearchResult.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        listSearchResult.setAdapter(searchResultAdapter);
+        listSearchResult.setHasFixedSize(true);
 
     }
 
@@ -103,7 +120,8 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     }
 
     @Override
-    public void successSearch(Volumes response) {
+    public void successSearch(@NonNull Volumes response) {
+        searchResultAdapter.addItems(response.getItems());
         progressDialog.dismiss();
     }
 

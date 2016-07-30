@@ -7,6 +7,7 @@ import com.example.asouza.myapplication.model.entity.Volumes;
 import com.google.inject.Inject;
 
 import retrofit2.Call;
+import rx.Observable;
 
 /**
  * Created by asouza on 11/07/16.
@@ -22,7 +23,7 @@ public class VolumesService {
     public VolumesService(){
     }
 
-    public Call<Volumes> search(@NonNull String query){
+    public Observable<Volumes> search(@NonNull String query){
         return booksRestModel.searchBook(query);
     }
 

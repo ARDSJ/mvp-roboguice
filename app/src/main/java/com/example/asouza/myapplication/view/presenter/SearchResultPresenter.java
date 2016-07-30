@@ -8,6 +8,10 @@ import com.google.inject.Inject;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Observer;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by asouza on 29/07/16.
@@ -20,16 +24,31 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContrat.Vie
     @Override
     public void search(String query) {
         getView().searching();
-        volumesService.search(query).enqueue(new Callback<Volumes>() {
+        volumesService.search(query)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<Volumes, Boolean>() {
+                    @Override
+                    public Boolean call(Volumes volumes) {
+                        return volumes.getItems().size()>0;
+                    }
+                })
+                .subscribe(new Observer<Volumes>() {
             @Override
-            public void onResponse(Call<Volumes> call, Response<Volumes> response) {
-                getView().successSearch(response.body());
+            public void onCompleted() {
+
             }
 
             @Override
-            public void onFailure(Call<Volumes> call, Throwable t) {
+            public void onError(Throwable e) {
                 getView().errorSearch();
             }
+
+            @Override
+            public void onNext(Volumes volumes) {
+                getView().successSearch(volumes);
+            }
         });
+
     }
 }

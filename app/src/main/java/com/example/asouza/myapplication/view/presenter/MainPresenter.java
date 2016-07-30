@@ -29,17 +29,5 @@ public class MainPresenter extends BasePresenter<MainContract.View> implements M
 
     @Override
     public void search(@NonNull String query) {
-        getView().searching();
-        volumesService.search(query).enqueue(new Callback<Volumes>() {
-            @Override
-            public void onResponse(Call<Volumes> call, Response<Volumes> response) {
-                getView().successSearch(response.body());
-            }
-
-            @Override
-            public void onFailure(Call<Volumes> call, Throwable t) {
-                getView().errorSearch();
-            }
-        });
     }
 }
