@@ -10,7 +10,7 @@ import retrofit2.Response;
  */
 public interface MainContract {
 
-    interface View{
+    interface View extends BaseContract.BaseView{
 
         void searching();
 

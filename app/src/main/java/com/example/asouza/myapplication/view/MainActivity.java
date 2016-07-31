@@ -50,7 +50,8 @@ public class MainActivity extends RoboActivity implements MainContract.View {
         setup();
     }
 
-    private void setup() {
+    @Override
+    public void setup() {
 
         RxTextView.editorActionEvents(inputSearch)
                 .subscribe(new Action1<TextViewEditorActionEvent>() {

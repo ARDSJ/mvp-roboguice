@@ -1,5 +1,7 @@
 package com.example.asouza.myapplication.di.module;
 
+import android.app.ProgressDialog;
+
 import com.example.asouza.myapplication.di.provider.BooksModelProvider;
 import com.example.asouza.myapplication.di.provider.NetBuilderProvider;
 import com.example.asouza.myapplication.model.IBooksRestModel;

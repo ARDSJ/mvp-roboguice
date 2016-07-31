@@ -7,7 +7,7 @@ import com.example.asouza.myapplication.model.entity.Volumes;
  */
 public interface SearchResultContrat{
 
-    interface View{
+    interface View extends BaseContract.BaseView{
 
         void searching();
 

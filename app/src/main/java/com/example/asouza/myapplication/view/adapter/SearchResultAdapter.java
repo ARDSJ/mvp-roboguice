@@ -14,13 +14,13 @@ import com.google.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import roboguice.inject.ContextSingleton;
+
 /**
  * Created by asouza on 29/07/16.
  */
+@ContextSingleton
 public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapter.SearchResultViewHolder> {
-
-    @Inject
-    Context context;
 
     @Inject
     LayoutInflater layoutInflater;
@@ -30,14 +30,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
     @Override
     public SearchResultViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View view = layoutInflater.inflate(R.layout.item_search_result, parent);
+        View view = layoutInflater.inflate(R.layout.item_search_result, parent, false);
 
         return new SearchResultViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(SearchResultViewHolder holder, int position) {
-        return;
     }
 
     @Override
@@ -52,12 +51,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
         }
     }
 
-    public List<Item> getItems() {
-        return items;
-    }
-
-    public void addItems(@NonNull List<Item> items) {
-        this.items.addAll(items);
+    public void addItems(List<Item> i) {
+        this.items.addAll(i);
         notifyDataSetChanged();
     }
 }
