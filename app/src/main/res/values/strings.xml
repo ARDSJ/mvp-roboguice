@@ -3,4 +3,5 @@
     <string name="lbl_search">Buscar Livro</string>
     <string name="searching_loading_message">Buscando...</string>
     <string name="transiction_input_search">transiction_input_search</string>
+    <string name="api_books_max_results_pagination">10</string>
 </resources>

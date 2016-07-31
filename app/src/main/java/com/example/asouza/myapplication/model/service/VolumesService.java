@@ -23,9 +23,8 @@ public class VolumesService {
     public VolumesService(){
     }
 
-    public Observable<Volumes> search(@NonNull String query){
-        return booksRestModel.searchBook(query);
+    public Observable<Volumes> search(@NonNull String query, @NonNull Integer startIndex){
+        return booksRestModel.searchBook(query, startIndex);
     }
-
 
 }

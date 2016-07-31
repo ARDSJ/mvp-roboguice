@@ -15,6 +15,8 @@ import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import roboguice.RoboGuice;
 import roboguice.activity.RoboActivity;
+import roboguice.context.event.OnCreateEvent;
+import roboguice.event.Observes;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
@@ -45,13 +47,7 @@ public class MainActivity extends RoboActivity implements MainContract.View {
     UtilIntent utilIntent;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setup();
-    }
-
-    @Override
-    public void setup() {
+    public void setup(@Observes OnCreateEvent onCreateEvent) {
 
         RxTextView.editorActionEvents(inputSearch)
                 .subscribe(new Action1<TextViewEditorActionEvent>() {

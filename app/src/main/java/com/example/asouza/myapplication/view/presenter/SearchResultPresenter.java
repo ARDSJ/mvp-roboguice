@@ -22,9 +22,9 @@ public class SearchResultPresenter extends BasePresenter<SearchResultContrat.Vie
     VolumesService volumesService;
 
     @Override
-    public void search(String query) {
+    public void search(String query, Integer startIndex) {
         getView().searching();
-        volumesService.search(query)
+        volumesService.search(query, startIndex)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter(new Func1<Volumes, Boolean>() {

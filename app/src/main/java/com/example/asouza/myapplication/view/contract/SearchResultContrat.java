@@ -19,7 +19,7 @@ public interface SearchResultContrat{
 
     interface Presenter{
 
-        void search(String query);
+        void search(String query, Integer startIndex);
 
     }
 

@@ -1,41 +1,38 @@
 package com.example.asouza.myapplication.view;
 
 import android.support.annotation.NonNull;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.asouza.myapplication.R;
 import com.example.asouza.myapplication.model.entity.Volumes;
+import com.example.asouza.myapplication.util.UtilPagination;
 import com.example.asouza.myapplication.util.UtilProgressDialog;
 import com.example.asouza.myapplication.view.adapter.SearchResultAdapter;
 import com.example.asouza.myapplication.view.contract.SearchResultContrat;
 import com.google.inject.Inject;
+import com.jakewharton.rxbinding.support.v7.widget.RecyclerViewScrollEvent;
+import com.jakewharton.rxbinding.support.v7.widget.RxRecyclerView;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.RxToolbar;
-import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
 import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import roboguice.activity.RoboActionBarActivity;
-import roboguice.activity.RoboActivity;
 import roboguice.context.event.OnCreateEvent;
 import roboguice.event.Observes;
 import roboguice.inject.ContentView;
+import roboguice.inject.ContextSingleton;
 import roboguice.inject.InjectExtra;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import rx.Observable;
-import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.functions.Func1;
 
+@ContextSingleton
 @ContentView(R.layout.activity_search_result)
 public class SearchResultActivity extends RoboActionBarActivity implements SearchResultContrat.View {
 
@@ -55,50 +52,24 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     SearchResultContrat.Presenter presenter;
 
     @Inject
-    UtilProgressDialog progressDialog;
-
-    @Inject
     SearchResultAdapter searchResultAdapter;
 
     @InjectResource(R.string.searching_loading_message)
     String searchingLoadingMessage;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setup();
-    }
+    @Inject
+    UtilPagination pagination;
+
+    GridLayoutManager gridLayoutManager;
 
     @Override
-    public void setup() {
-
-        presenter.search(paramSearchQuery);
-        inputSearch.setText(paramSearchQuery);
-
+    public void setup(@Observes OnCreateEvent onCreateEvent) {
         setSupportActionBar(toolbarSearch);
         getSupportActionBar().setDefaultDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        listSearchResult.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, true));
+        gridLayoutManager = new GridLayoutManager(this, 2);
+        listSearchResult.setLayoutManager(gridLayoutManager);
         listSearchResult.setAdapter(searchResultAdapter);
-        listSearchResult.setHasFixedSize(true);
-
-        RxTextView.editorActionEvents(inputSearch)
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter(new Func1<TextViewEditorActionEvent, Boolean>() {
-                    @Override
-                    public Boolean call(TextViewEditorActionEvent textViewEditorActionEvent) {
-                        return textViewEditorActionEvent.view().getText().toString().trim().length() > 0;
-                    }
-                })
-                .subscribe(new Action1<TextViewEditorActionEvent>() {
-                    @Override
-                    public void call(TextViewEditorActionEvent textViewEditorActionEvent) {
-                        String query = textViewEditorActionEvent.view().getText().toString();
-                        presenter.search(query);
-                    }
-                });
-
     }
 
     @Override
@@ -111,19 +82,60 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void searching() {
-        progressDialog.show(searchingLoadingMessage);
+    private void initialSearch(@Observes OnCreateEvent onCreateEvent) {
+        presenter.search(paramSearchQuery,0);
+        inputSearch.setText(paramSearchQuery);
+    }
+
+    private void searchInputEvents(@Observes OnCreateEvent onCreateEvent) {
+        RxTextView.editorActionEvents(inputSearch)
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter(new Func1<TextViewEditorActionEvent, Boolean>() {
+                    @Override
+                    public Boolean call(TextViewEditorActionEvent textViewEditorActionEvent) {
+                        return textViewEditorActionEvent.view().getText().toString().trim().length() > 0;
+                    }
+                })
+                .subscribe(new Action1<TextViewEditorActionEvent>() {
+                    @Override
+                    public void call(TextViewEditorActionEvent textViewEditorActionEvent) {
+                        String query = textViewEditorActionEvent.view().getText().toString();
+                        presenter.search(query, 0);
+                    }
+                });
+    }
+
+    private void listSearchResultEvents(@Observes OnCreateEvent onCreateEvent){
+        Observable<RecyclerViewScrollEvent> recyclerViewScrollEventObservable = RxRecyclerView.scrollEvents(listSearchResult);
+
+        recyclerViewScrollEventObservable.subscribe(new Action1<RecyclerViewScrollEvent>() {
+            @Override
+            public void call(RecyclerViewScrollEvent recyclerViewScrollEvent) {
+                int itemCount = searchResultAdapter.getItemCount();
+                int lastCompletelyVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition();
+                if(lastCompletelyVisibleItemPosition >= (itemCount - 1)){
+
+                    searchResultAdapter.showLoading();
+                    presenter.search(paramSearchQuery,pagination.incrementPage());
+                }
+            }
+        });
+
     }
 
     @Override
-    public void successSearch(@NonNull Volumes response) {
+    public void searching() {
+        searchResultAdapter.showLoading();
+    }
+
+    @Override
+    public void successSearch(@NonNull Volumes response){
         searchResultAdapter.addItems(response.getItems());
-        progressDialog.dismiss();
+        searchResultAdapter.hideLoading();
     }
 
     @Override
     public void errorSearch() {
-        progressDialog.dismiss();
+        searchResultAdapter.hideLoading();
     }
 }

@@ -15,6 +15,6 @@ import rx.Observable;
 public interface IBooksRestModel {
 
     @GET("volumes")
-    public Observable<Volumes> searchBook(@Query("q") String query);
+    public Observable<Volumes> searchBook(@Query("q") String query,@Query("startIndex") Integer startIndex);
 
 }
