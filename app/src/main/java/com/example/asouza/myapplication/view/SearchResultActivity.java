@@ -70,6 +70,7 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
         gridLayoutManager = new GridLayoutManager(this, 2);
         listSearchResult.setLayoutManager(gridLayoutManager);
         listSearchResult.setAdapter(searchResultAdapter);
+        listSearchResult.setHasFixedSize(false);
     }
 
     @Override
@@ -83,7 +84,7 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     }
 
     private void initialSearch(@Observes OnCreateEvent onCreateEvent) {
-        presenter.search(paramSearchQuery,0);
+        presenter.search(paramSearchQuery, pagination.getCurrentPage());
         inputSearch.setText(paramSearchQuery);
     }
 
@@ -99,13 +100,15 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
                 .subscribe(new Action1<TextViewEditorActionEvent>() {
                     @Override
                     public void call(TextViewEditorActionEvent textViewEditorActionEvent) {
+                        pagination.reset();
+                        searchResultAdapter.reset();
                         String query = textViewEditorActionEvent.view().getText().toString();
-                        presenter.search(query, 0);
+                        presenter.search(query, pagination.getCurrentPage());
                     }
                 });
     }
 
-    private void listSearchResultEvents(@Observes OnCreateEvent onCreateEvent){
+    private void listSearchResultEvents(@Observes OnCreateEvent onCreateEvent) {
         Observable<RecyclerViewScrollEvent> recyclerViewScrollEventObservable = RxRecyclerView.scrollEvents(listSearchResult);
 
         recyclerViewScrollEventObservable.subscribe(new Action1<RecyclerViewScrollEvent>() {
@@ -113,10 +116,9 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
             public void call(RecyclerViewScrollEvent recyclerViewScrollEvent) {
                 int itemCount = searchResultAdapter.getItemCount();
                 int lastCompletelyVisibleItemPosition = gridLayoutManager.findLastCompletelyVisibleItemPosition();
-                if(lastCompletelyVisibleItemPosition >= (itemCount - 1)){
-
+                if (lastCompletelyVisibleItemPosition >= (itemCount - 1)) {
                     searchResultAdapter.showLoading();
-                    presenter.search(paramSearchQuery,pagination.incrementPage());
+                    presenter.search(inputSearch.getText().toString(), pagination.incrementPage());
                 }
             }
         });
@@ -129,7 +131,7 @@ public class SearchResultActivity extends RoboActionBarActivity implements Searc
     }
 
     @Override
-    public void successSearch(@NonNull Volumes response){
+    public void successSearch(@NonNull Volumes response) {
         searchResultAdapter.addItems(response.getItems());
         searchResultAdapter.hideLoading();
     }

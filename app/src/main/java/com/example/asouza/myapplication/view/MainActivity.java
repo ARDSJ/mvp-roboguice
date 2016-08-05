@@ -18,10 +18,12 @@ import roboguice.activity.RoboActivity;
 import roboguice.context.event.OnCreateEvent;
 import roboguice.event.Observes;
 import roboguice.inject.ContentView;
+import roboguice.inject.ContextSingleton;
 import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
 import rx.functions.Action1;
 
+@ContextSingleton
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity implements MainContract.View {
 

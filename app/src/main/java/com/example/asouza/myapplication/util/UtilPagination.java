@@ -16,8 +16,12 @@ public class UtilPagination {
 
     private Integer currentPage = 0;
 
+    public void reset(){
+        this.currentPage = 0;
+    }
+
     public Integer incrementPage() {
-        this.currentPage = +Integer.parseInt(this.apiBooksMaxResultsPagination);
+        this.currentPage +=Integer.parseInt(this.apiBooksMaxResultsPagination);
         return this.currentPage;
     }
 

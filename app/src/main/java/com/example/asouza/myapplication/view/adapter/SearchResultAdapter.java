@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.example.asouza.myapplication.R;
+import com.example.asouza.myapplication.model.entity.ImageLinks;
 import com.example.asouza.myapplication.model.entity.Item;
 import com.example.asouza.myapplication.view.holder.SearchResultViewHolder;
 import com.google.inject.Inject;
@@ -58,12 +59,16 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultViewHo
 
         Object dataItem = dataSource.get(position);
 
-        if (dataItem.getClass().equals(Item.class)) {
+        if (dataItem.getClass().equals(Item.class)){
             Item itemVolume = (Item) dataItem;
-            String thumbnail = itemVolume.getVolumeInfo().getImageLinks().getThumbnail();
-            picasso
-                    .load(thumbnail)
-                    .into(holder.imgVolumeCover);
+            ImageLinks imageLinks = itemVolume.getVolumeInfo().getImageLinks();
+            if(null != imageLinks){
+                String thumbnail = imageLinks.getThumbnail();
+                picasso
+                        .load(thumbnail)
+                        .into(holder.imgVolumeCover);
+            }
+
         }
 
     }
@@ -92,9 +97,8 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultViewHo
         notifyDataSetChanged();
     }
 
-    public void setItems(List<Item> i) {
+    public void reset() {
         this.dataSource.clear();
-        this.dataSource.addAll(i);
         notifyDataSetChanged();
     }
 
