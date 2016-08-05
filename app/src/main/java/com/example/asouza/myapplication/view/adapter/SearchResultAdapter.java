@@ -59,16 +59,13 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultViewHo
 
         Object dataItem = dataSource.get(position);
 
-        if (dataItem.getClass().equals(Item.class)){
+        if (dataItem.getClass().equals(Item.class)) {
             Item itemVolume = (Item) dataItem;
             ImageLinks imageLinks = itemVolume.getVolumeInfo().getImageLinks();
-            if(null != imageLinks){
-                String thumbnail = imageLinks.getThumbnail();
-                picasso
-                        .load(thumbnail)
-                        .into(holder.imgVolumeCover);
-            }
-
+            String thumbnail = imageLinks.getThumbnail();
+            picasso
+                    .load(thumbnail)
+                    .into(holder.imgVolumeCover);
         }
 
     }
