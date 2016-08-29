@@ -2,6 +2,8 @@
 package com.example.asouza.myapplication.model.entity;
 
 
+import android.text.TextUtils;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 

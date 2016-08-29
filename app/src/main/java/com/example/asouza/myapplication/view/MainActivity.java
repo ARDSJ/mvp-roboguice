@@ -1,59 +1,65 @@
 package com.example.asouza.myapplication.view;
 
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.widget.EditText;
 
 import com.example.asouza.myapplication.R;
 import com.example.asouza.myapplication.model.entity.Volumes;
+import com.example.asouza.myapplication.util.UtilIntent;
+import com.example.asouza.myapplication.util.UtilProgressDialog;
 import com.example.asouza.myapplication.view.contract.MainContract;
 import com.google.inject.Inject;
 import com.jakewharton.rxbinding.widget.RxTextView;
-import com.jakewharton.rxbinding.widget.TextViewAfterTextChangeEvent;
-
-import java.util.concurrent.TimeUnit;
+import com.jakewharton.rxbinding.widget.TextViewEditorActionEvent;
 
 import roboguice.RoboGuice;
-import roboguice.activity.RoboActionBarActivity;
+import roboguice.activity.RoboActivity;
+import roboguice.context.event.OnCreateEvent;
+import roboguice.event.Observes;
 import roboguice.inject.ContentView;
+import roboguice.inject.ContextSingleton;
+import roboguice.inject.InjectResource;
 import roboguice.inject.InjectView;
-import rx.Observable;
 import rx.functions.Action1;
-import rx.functions.Func1;
 
+@ContextSingleton
 @ContentView(R.layout.activity_main)
-public class MainActivity extends RoboActionBarActivity implements MainContract.View{
+public class MainActivity extends RoboActivity implements MainContract.View {
+
+    @InjectResource(R.string.searching_loading_message)
+    private String searchingMessage;
+
+    @InjectResource(R.string.transiction_input_search)
+    private String transictionInputSearch;
 
     @InjectView(R.id.input_search)
     EditText inputSearch;
 
+    @InjectView(R.id.toolbar_search)
+    Toolbar toolbarSearch;
+
     @Inject
     MainContract.Presenter presenter;
 
+    @Inject
+    UtilProgressDialog utilProgressDialog;
+
+    @Inject
+    UtilIntent utilIntent;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setup();
-    }
+    public void setup(@Observes OnCreateEvent onCreateEvent) {
 
-    private void setup() {
-
-        Observable<TextViewAfterTextChangeEvent> observerInputSearch = RxTextView.afterTextChangeEvents(inputSearch).share();
-
-        observerInputSearch
-                .debounce(2000, TimeUnit.MILLISECONDS)
-                .filter(new Func1<TextViewAfterTextChangeEvent, Boolean>() {
+        RxTextView.editorActionEvents(inputSearch)
+                .subscribe(new Action1<TextViewEditorActionEvent>() {
                     @Override
-                    public Boolean call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
-                        return textViewAfterTextChangeEvent.editable().toString().trim().length() > 1;
+                    public void call(TextViewEditorActionEvent textViewEditorActionEvent) {
+                        String query = textViewEditorActionEvent.view().getText().toString();
+                        utilIntent.getIntent().putExtra("paramSearchQuery",query);
+                        utilIntent.newIntentWithSharedElements(SearchResultActivity.class,transictionInputSearch, toolbarSearch);
                     }
-                })
-                .subscribe(new Action1<TextViewAfterTextChangeEvent>() {
-            @Override
-            public void call(TextViewAfterTextChangeEvent textViewAfterTextChangeEvent) {
-                String query = textViewAfterTextChangeEvent.editable().toString();
-                presenter.search(query);
-            }
-        });
+                });
     }
 
     static {
@@ -62,17 +68,17 @@ public class MainActivity extends RoboActionBarActivity implements MainContract.
 
     @Override
     public void searching() {
-
+        utilProgressDialog.show(searchingMessage);
     }
 
     @Override
     public void successSearch(Volumes response) {
-
+        utilProgressDialog.dismiss();
     }
 
     @Override
     public void errorSearch() {
-
+        utilProgressDialog.dismiss();
     }
 
 }

@@ -9,8 +9,8 @@ import com.google.inject.Inject;
  */
 public abstract class BasePresenter<T>{
 
-    @Inject public Activity activity;
-    @Inject public T view;
+    @Inject private Activity activity;
+    @Inject private T view;
 
     public Activity getActivity() {
         return activity;

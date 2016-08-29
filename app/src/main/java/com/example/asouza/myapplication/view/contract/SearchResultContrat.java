@@ -2,13 +2,10 @@ package com.example.asouza.myapplication.view.contract;
 
 import com.example.asouza.myapplication.model.entity.Volumes;
 
-import retrofit2.Call;
-import retrofit2.Response;
-
 /**
- * Created by asouza on 11/07/16.
+ * Created by asouza on 29/07/16.
  */
-public interface MainContract {
+public interface SearchResultContrat{
 
     interface View extends BaseContract.BaseView{
 
@@ -22,7 +19,7 @@ public interface MainContract {
 
     interface Presenter{
 
-        void search(String query);
+        void search(String query, Integer startIndex);
 
     }
 
